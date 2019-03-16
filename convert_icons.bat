@@ -1,0 +1,1 @@
+bdfconv_2_22.exe tm_icons.bdf -f 1 -n tm_icons_12x12 -o include\tm_icons.h
