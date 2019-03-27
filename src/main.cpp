@@ -1,5 +1,5 @@
 //TODO: WPS support
-//TODO: Постраничный вывод, но выключить setAutoPageClear
+//TODO: Частичное обновление экрана вместо полного
 #include "tmaster.h"
 
 void onScanDone(char *barcode, long mode);
@@ -626,7 +626,7 @@ void drawCenterLine(u8g2_uint_t y, const char *s, uint16_t icon = 0, bool is_dis
     u8g2.drawBox(0, y - line_height, disp_width, line_height);
   }
 }
-// TODO: Переделать вывод пунктов меню в цикл и по количеству помещающихся на экран
+//TODO: Переделать вывод пунктов меню в цикл и по количеству помещающихся на экран
 void drawMenuScreen()
 {
   u8g2.firstPage();
@@ -803,7 +803,6 @@ char *getParamStringValue(Menu_Item *menuitem, char *buf)
   case ptEnum:
   {
     EnumStruct *enumData = (EnumStruct *)(menuitem->Param.Data.Size);
-    //TODO: Получать данные переданного параметра, а не текущего
     uint8_t curVal = *(uint8_t*)Menu_ReadParam(menuitem);
     return (char *)&enumData->EnumItems[curVal];
   }
@@ -895,16 +894,16 @@ void drawCaptions()
 
   u8g2_uint_t line_height = u8g2.getAscent() - u8g2.getDescent();
 
-  u8g2.setAutoPageClear(0);
+  /*u8g2.setAutoPageClear(0);
   u8g2.firstPage(); 
-  do {
+  do {*/
     u8g2.setFontMode(0);
     u8g2.setDrawColor(0);
     if (caption_scrolling)
       u8g2.drawBox(0, DISP_HEIGHT - CAPTIONS_HEIGHT - 1, DISP_WIDTH, CAPTIONS_HEIGHT + 1);
     u8g2.setDrawColor(1);
     u8g2.drawHLine(0, DISP_HEIGHT - CAPTIONS_HEIGHT - 2, DISP_WIDTH);
-    u8g2.setClipWindow(0, DISP_HEIGHT - CAPTIONS_HEIGHT - 1, DISP_WIDTH, DISP_HEIGHT + 1);
+    //u8g2.setClipWindow(0, DISP_HEIGHT - CAPTIONS_HEIGHT - 1, DISP_WIDTH, DISP_HEIGHT + 1);
     int x_offset = 0;
     for (int i = 0; i < count; i++)
     {
@@ -914,10 +913,13 @@ void drawCaptions()
       u8g2.setFont(BASE_FONT);
       x_offset += u8g2.drawUTF8(caption_x_offset + x_offset, DISP_HEIGHT - (CAPTIONS_HEIGHT - line_height) / 2 - 2/*+ u8g2.getDescent()*/ , CurrentCaptions.Captions[i].text) + 3;
     }
-    u8g2.setMaxClipWindow();
-  } while ( u8g2.nextPage() );
-  u8g2.setAutoPageClear(1);
-  //u8g2.sendBuffer();
+    //u8g2.setMaxClipWindow();
+  //} while ( u8g2.nextPage() );
+  //u8g2.setAutoPageClear(1);
+  ////u8g2.sendBuffer();
+  uint8_t tile_y = (DISP_HEIGHT - CAPTIONS_HEIGHT - 2) / 8;
+  uint8_t tile_height = u8g2.getBufferTileHeight() - tile_y;
+  u8g2.updateDisplayArea(0, tile_y, u8g2.getBufferTileWidth(), tile_height);
   if (caption_width > DISP_WIDTH)
   {
     caption_scrolling = true;
@@ -938,7 +940,8 @@ void drawCaptions()
     caption_scrolling = false;
 }
 
-void drawEditScreen()//TODO: Для чисел выводить границы
+void drawEditScreen()
+//TODO: Для чисел выводить границы
 {
   u8g2.firstPage(); 
   do {

@@ -1,6 +1,4 @@
-// TODO: Хранение настроек в NVS
 // TODO: Хранение параметров WiFi-сетев в NVS
-// TODO: Различные хранилища настроек
 //#include "nvs_func.cpp"
 /*
 -30 dBm	Maximum signal strength, you are probably standing right next to the access point.	
