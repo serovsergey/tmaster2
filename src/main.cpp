@@ -626,6 +626,7 @@ void drawCenterLine(u8g2_uint_t y, const char *s, uint16_t icon = 0, bool is_dis
     u8g2.drawBox(0, y - line_height, disp_width, line_height);
   }
 }
+
 //TODO: Переделать вывод пунктов меню в цикл и по количеству помещающихся на экран
 void drawMenuScreen()
 {
