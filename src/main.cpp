@@ -642,7 +642,7 @@ void drawMenuScreen()
     //char menuTitle[MENU_TEXT_SIZE];
     if (tempMenu != &NULL_MENU)
     {
-      drawCenterLine(line_height, tempMenu->Text);
+      drawCenterLine(line_height, tempMenu->Text); //
     }
     else
       drawCenterLine(line_height, PSTR("НАСТРОЙКИ"));
